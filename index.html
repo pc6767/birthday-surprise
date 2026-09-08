@@ -778,6 +778,9 @@
         radial-gradient(circle at 25% 20%, rgba(255,132,185,.28), transparent 26%),
         linear-gradient(145deg, #6f215b, #36163f 60%, #1c0e26);
     }
+    .photo-fallback[hidden] {
+  display: none !important;
+}
     .photo-fallback span { font-size: 2.3rem; display: block; }
     .photo-fallback small { display: block; margin-top: 8px; color: #ffe2f0; font-size: .82rem; }
     .polaroid-caption {
@@ -1410,9 +1413,14 @@
           img.loading = "lazy";
           img.decoding = "async";
 
-          const fallback = document.createElement("div");
-          fallback.className = "photo-fallback";
-          fallback.hidden = true;
+         const fallback = document.createElement("div");
+fallback.className = "photo-fallback";
+fallback.hidden = true;
+
+img.addEventListener("error", () => {
+  img.hidden = true;
+  fallback.hidden = false;
+}, { once: true });
           fallback.innerHTML = `<div><span>💞</span><strong>Your photo goes here</strong><small>${escapeHTML(src)}</small></div>`;
 
           img.addEventListener("error", () => {
